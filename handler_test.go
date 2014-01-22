@@ -11,19 +11,21 @@ type TestHandlerOwner struct {
 
 func TestHandler1(t *testing.T) {
 	owner := new(TestHandlerOwner)
-	h := NewEventHandler()
+	h := New()
 
 	i := 1
-	h.On("do", owner, func(m interface{}) {
+	h.On("do", owner, func(m interface{}, msgs Msgs) error {
 		if m2, ok := m.(*TestHandlerOwner); !ok {
 			t.Error("the model does not a TestHandlerOwner")
 		} else {
 			m2.Name = "test" + strconv.Itoa(i)
 			i++
 		}
+
+		return nil
 	})
 
-	h.Emit("do", owner)
+	h.Emit("do", owner, nil)
 
 	if 2 != i {
 		t.Error("the call back does not work")
@@ -40,7 +42,7 @@ func TestHandler1(t *testing.T) {
 		t.Error("event's owner has not been updated")
 	}
 
-	h.Emit("do", owner)
+	h.Emit("do", owner, nil)
 
 	if owner.Name != "test2" {
 		t.Error("the callback not work at second time")

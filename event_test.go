@@ -18,7 +18,7 @@ func newTestEvent() *event {
 
 func TestEvent1(t *testing.T) {
 	e := newTestEvent()
-	e.Attach("t1", func(m interface{}) {
+	e.Attach("t1", func(m interface{}, msgs Msgs) error {
 		if m2, ok := m.(TestEvent); !ok {
 			t.Error("the callback model is not TestEvent")
 		} else {
@@ -34,6 +34,8 @@ func TestEvent1(t *testing.T) {
 				t.Error("the owenr is not TestEvent")
 			}
 		}
+
+		return nil
 	})
 
 	if 1 != len(e.callbacks) {
@@ -46,9 +48,9 @@ func TestEvent1(t *testing.T) {
 		t.Error("the callbacks is still there, Detach does not work well")
 	}
 
-	e.Attach("t2", func(m interface{}) {})
-	e.Attach("t2", func(m interface{}) {})
-	e.Attach("t2", func(m interface{}) {})
+	e.Attach("t2", func(m interface{}, msgs Msgs) error { return nil })
+	e.Attach("t2", func(m interface{}, msgs Msgs) error { return nil })
+	e.Attach("t2", func(m interface{}, msgs Msgs) error { return nil })
 
 	if 3 != len(e.Callbacks("t2")) {
 		t.Error("the callbacks does not bind correctly")

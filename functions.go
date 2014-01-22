@@ -1,6 +1,16 @@
 package event
 
-func NewEventHandler() *eventHandler {
+var globalEventHandler *eventHandler
+
+func Global() *eventHandler {
+	if globalEventHandler == nil {
+		globalEventHandler = New()
+	}
+
+	return globalEventHandler
+}
+
+func New() *eventHandler {
 	e := new(eventHandler)
 	e.events = []*event{}
 	return e

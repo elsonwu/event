@@ -1,6 +1,6 @@
 package event
 
-type EventCallback func(model interface{})
+type EventCallback func(owner interface{}, msgs Msgs) error
 
 type eventHandler struct {
 	events []*event
@@ -41,14 +41,22 @@ func (self *eventHandler) On(name string, owner interface{}, callback EventCallb
 	}
 }
 
-func (self *eventHandler) Emit(name string, owner interface{}) {
+func (self *eventHandler) Emit(name string, owner interface{}, msgs Msgs) error {
 	for _, event := range self.events {
-		if event.owner == owner {
-			if callbacks, ok := event.callbacks[name]; ok {
-				for _, callback := range callbacks {
-					callback(owner)
+		if event.owner != owner {
+			continue
+		}
+
+		if callbacks, ok := event.callbacks[name]; ok {
+			for _, callback := range callbacks {
+				if err := callback(owner, msgs); err != nil {
+					return err
 				}
 			}
+
+			break
 		}
 	}
+
+	return nil
 }
