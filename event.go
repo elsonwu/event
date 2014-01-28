@@ -5,6 +5,10 @@ type event struct {
 	callbacks map[string][]EventCallback
 }
 
+func (self *event) IsEmpty() bool {
+	return 0 == len(self.callbacks)
+}
+
 func (self *event) Attach(name string, callback EventCallback) {
 	if self.callbacks == nil {
 		self.callbacks = map[string][]EventCallback{}

@@ -12,6 +12,6 @@ func Global() *eventHandler {
 
 func New() *eventHandler {
 	e := new(eventHandler)
-	e.events = []*event{}
+	e.events = map[uintptr]*event{}
 	return e
 }

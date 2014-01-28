@@ -31,7 +31,7 @@ func TestHandler1(t *testing.T) {
 		t.Error("the call back does not work")
 	}
 
-	ev := h.getEventByOwner(owner)
+	ev, _ := h.getEventByOwner(owner)
 	if ev == nil {
 		t.Error("event does not save with the owner")
 	} else if ev.owner == nil {

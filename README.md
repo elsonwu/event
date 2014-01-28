@@ -23,4 +23,12 @@ a simple model event
 		return nil
 	})
 	
+	// off the "save" event on model
 	evt.Off("save", model)
+
+	// off everthing on model
+	evt.Off("", model)
+
+Note
+
+	it's better to off any useless model, if not Go's gc can't clean the model this evt
